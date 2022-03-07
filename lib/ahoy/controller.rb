@@ -5,8 +5,8 @@ module Ahoy
         base.helper_method :current_visit
         base.helper_method :ahoy
       end
-      base.before_action :set_ahoy_cookies, unless: -> { Ahoy.api_only }
-      base.before_action :track_ahoy_visit, unless: -> { Ahoy.api_only }
+      base.before_action :set_ahoy_cookies, if: -> { Ahoy.controller_callbacks }, unless: -> { Ahoy.api_only }
+      base.before_action :track_ahoy_visit, if: -> { Ahoy.controller_callbacks }, unless: -> { Ahoy.api_only }
       base.around_action :set_ahoy_request_store
     end
 
