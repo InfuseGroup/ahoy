@@ -171,8 +171,8 @@ class ControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  def test_controller_callbacks
-    with_options(controller_callbacks: false) do
+  def test_default_controller_callbacks
+    with_options(default_controller_callbacks: false) do
       get list_products_url
       assert_equal 0, Ahoy::Visit.count
       assert_empty response.cookies

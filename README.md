@@ -113,7 +113,7 @@ By default, Ahoy will create visits using Rails controller action callbacks.
 To handle the callbacks yourself, use:
 
 ```ruby
-Ahoy.controller_callbacks = false
+Ahoy.default_controller_callbacks = false
 ```
 
 You could also prevent certain Rails actions from creating visits with:
