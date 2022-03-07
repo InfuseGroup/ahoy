@@ -118,20 +118,20 @@ module Ahoy
   end
 
   # @return [RequestStore] Request store
-  def self.request_storage
+  def self.request_store
     RequestStore.store
   end
 
   # allow cookies variable based on the current request
   def self.cookies
-    return server_side_cookies if request_storage[:cookies].nil?
+    return server_side_cookies if request_store[:cookies].nil?
 
-    request_storage[:cookies]
+    request_store[:cookies]
   end
 
   # allow cookies variable based on the current request
   def self.cookies=(value)
-    request_storage[:cookies] = value
+    request_store[:cookies] = value
   end
 end
 
