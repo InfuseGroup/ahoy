@@ -6,6 +6,7 @@ module Ahoy
         base.helper_method :ahoy
       end
       base.before_action :set_ahoy_cookies, if: -> { Ahoy.controller_callbacks }, unless: -> { Ahoy.api_only }
+      base.before_action :delete_ahoy_cookies, if: -> { Ahoy.controller_callbacks }, unless: -> { Ahoy.api_only }
       base.before_action :track_ahoy_visit, if: -> { Ahoy.controller_callbacks }, unless: -> { Ahoy.api_only }
       base.around_action :set_ahoy_request_store
     end
@@ -19,13 +20,17 @@ module Ahoy
     end
 
     def set_ahoy_cookies
-      if Ahoy.cookies
-        ahoy.set_visitor_cookie
-        ahoy.set_visit_cookie
-      else
-        # delete cookies if exist
-        ahoy.reset
-      end
+      return unless Ahoy.cookies
+
+      ahoy.set_visitor_cookie
+      ahoy.set_visit_cookie
+    end
+
+    def delete_ahoy_cookies
+      return if Ahoy.cookies
+
+      # delete cookies if exist
+      ahoy.reset
     end
 
     def track_ahoy_visit
