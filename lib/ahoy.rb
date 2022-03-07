@@ -5,6 +5,7 @@ require "ipaddr"
 require "active_support"
 require "active_support/core_ext"
 require "safely/core"
+require "request_store"
 
 # modules
 require "ahoy/utils"
@@ -27,8 +28,8 @@ module Ahoy
   mattr_accessor :visitor_duration
   self.visitor_duration = 2.years
 
-  mattr_accessor :cookies
-  self.cookies = true
+  mattr_accessor :server_side_cookies
+  self.server_side_cookies = true
 
   # TODO deprecate in favor of cookie_options
   mattr_accessor :cookie_domain
@@ -114,6 +115,23 @@ module Ahoy
 
   def self.instance=(value)
     Thread.current[:ahoy] = value
+  end
+
+  # @return [RequestStore] Request store
+  def self.request_storage
+    RequestStore.store
+  end
+
+  # allow cookies variable based on the current request
+  def self.cookies
+    return server_side_cookies if request_storage[:cookies].nil?
+
+    request_storage[:cookies]
+  end
+
+  # allow cookies variable based on the current request
+  def self.cookies=(value)
+    request_storage[:cookies] = value
   end
 end
 
