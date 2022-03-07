@@ -18,5 +18,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency "activesupport", ">= 5.2"
   spec.add_dependency "safely_block", ">= 0.2.1"
   spec.add_dependency "device_detector"
-  spec.add_dependency "request_store"
+  spec.add_dependency "request_store", "~> 1.5.0"
 end
