@@ -61,8 +61,8 @@ module Ahoy
   mattr_accessor :api_only
   self.api_only = false
 
-  mattr_accessor :default_controller_callbacks
-  self.default_controller_callbacks = true
+  mattr_accessor :automatic_tracking
+  self.automatic_tracking = true
 
   mattr_accessor :protect_from_forgery
   self.protect_from_forgery = true
