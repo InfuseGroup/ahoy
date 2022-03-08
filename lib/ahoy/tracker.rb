@@ -145,6 +145,14 @@ module Ahoy
       delete_cookie("ahoy_track")
     end
 
+    def visitor_using_anonymity_set?
+      visitor_anonymity_set == visitor_token_helper
+    end
+
+    def visit_using_anonymity_set?
+      visit_anonymity_set == visit_token_helper
+    end
+
     protected
 
     def api?
