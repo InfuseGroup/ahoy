@@ -171,6 +171,14 @@ class ControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  def test_automatic_tracking
+    with_options(automatic_tracking: false) do
+      get list_products_url
+      assert_equal 0, Ahoy::Visit.count
+      assert_empty response.cookies
+    end
+  end
+
   def test_cookies_true
     get products_url
     assert_equal ["ahoy_visit", "ahoy_visitor"], response.cookies.keys.sort
@@ -197,6 +205,40 @@ class ControllerTest < ActionDispatch::IntegrationTest
       expired = "max-age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT"
       assert_equal 3, response.headers["Set-Cookie"].scan(expired).size
     end
+  end
+
+  def test_server_side_cookies_true
+    get products_url
+    assert_equal ["ahoy_visit", "ahoy_visitor"], response.cookies.keys.sort
+  end
+
+  def test_server_side_cookies_false
+    with_options(server_side_cookies: false) do
+      get products_url
+      assert_empty response.cookies
+      visit = Ahoy::Visit.last
+      # deterministic tokens
+      assert_equal "8924a60c-5c50-5d80-b38d-e6c68fcd0958", visit.visit_token
+      assert_equal "64dcde66-9659-5473-897e-5abd59f8b89f", visit.visitor_token
+    end
+  end
+
+  def test_server_side_cookies_false_but_request_level_cookies_true
+    with_options(server_side_cookies: false) do
+      Ahoy.cookies = true
+      get products_url
+      assert_equal ["ahoy_visit", "ahoy_visitor"], response.cookies.keys.sort
+    end
+  end
+
+  def test_server_side_cookies_true_but_request_level_cookies_false
+    Ahoy.cookies = false
+    get products_url
+    assert_empty response.cookies
+    visit = Ahoy::Visit.last
+    # deterministic tokens
+    assert_equal "8924a60c-5c50-5d80-b38d-e6c68fcd0958", visit.visit_token
+    assert_equal "64dcde66-9659-5473-897e-5abd59f8b89f", visit.visitor_token
   end
 
   def test_cookie_options

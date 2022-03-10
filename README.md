@@ -95,7 +95,22 @@ When someone visits your website, Ahoy creates a visit with lots of useful infor
 
 Use the `current_visit` method to access it.
 
-Prevent certain Rails actions from creating visits with:
+By default, Ahoy will create visits and set cookies.
+To handle these yourself, use:
+
+```ruby
+Ahoy.automatic_tracking = false
+```
+
+and then in the controllers you want to track, use:
+
+```ruby
+before_action :set_ahoy_cookies
+before_action :delete_ahoy_cookies
+before_action :track_ahoy_visit
+```
+
+You could also leave automatic tracking on and prevent certain Rails actions from creating visits with:
 
 ```ruby
 skip_before_action :track_ahoy_visit
